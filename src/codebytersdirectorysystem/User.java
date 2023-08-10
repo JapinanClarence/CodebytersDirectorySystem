@@ -22,7 +22,7 @@ abstract public class User {
 
     //member specific attributes
     protected String gender;
-    protected String dateOfBirth;
+    protected String birthDate;
     protected String cellphoneNumber;
     protected String email;
 
@@ -34,7 +34,7 @@ abstract public class User {
     abstract public void add();
 
     abstract public ArrayList<User> read();
-
+    
     abstract public void update();
 
     //setters
@@ -42,8 +42,8 @@ abstract public class User {
         this.gender = gender;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setBirthDate(String dateOfBirth) {
+        this.birthDate = dateOfBirth;
     }
 
     public void setCellNum(String cellNum) {
@@ -59,8 +59,8 @@ abstract public class User {
         return this.gender;
     }
 
-    public String getDoB() {
-        return this.dateOfBirth;
+    public String getBirthDate() {
+        return this.birthDate;
     }
 
     public String getCellNum() {

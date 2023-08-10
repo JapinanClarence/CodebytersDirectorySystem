@@ -33,11 +33,11 @@ public class CodebytersDirectorySystem {
             System.out.println("""
 
                                 *----------------System Menu---------------*
-                                a -> Add Member/Officer
-                                b -> Display List of Members/Officers
-                                c -> Search Member/Officer
-                                d -> Update Member/Officer
-                                e -> Exit
+                                a. Add Member/Officer
+                                b. Display List of Members/Officers
+                                c. Search Member/Officer
+                                d. Edit Member Info
+                                e. Exit
                                 """);
             System.out.print("Enter option: ");
             char operator = scan.next().charAt(0);
@@ -66,250 +66,318 @@ public class CodebytersDirectorySystem {
         //instantiate classes
         Member member = new Member();
         Officer officer = new Officer();
+        boolean isContinue = true;
 
-        Scanner sc = new Scanner(System.in);
-        System.out.print("""
+        do {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("""
                         Enter:
                         a. Members
                         b. Officers
-
+                        c. Menu
                         """);
-        String option = sc.nextLine().toLowerCase();
 
-        switch (option) {
-            case "a": {
-                boolean pass = false;
-                //set firstname
-                System.out.print("Enter first name: ");
-                member.setFirstName(sc.nextLine());
+            System.out.print("Enter option : ");
+            String option = sc.nextLine().toLowerCase();
 
-                //set mid initial
-                String initial = null;
-                while (pass == false) {
-                    System.out.print("Enter middle intial: ");
-                    initial = sc.nextLine();
+            switch (option) {
+                case "a": {
+                    boolean pass = false;
 
-                    if (!isValidMiddleInitial(initial)) {
-                        System.out.println(ANSI_RED + "Invalid middle initial. Please enter a single uppercase letter." + ANSI_RESET);
-                    } else {
-                        pass = true;
+                    //set firstname
+                    System.out.print("Enter first name: ");
+                    String firstName = sc.nextLine();
+                    member.setFirstName(firstName);
+
+                    boolean validInitial = false;
+                    //set mid initial
+                    String initial = null;
+                    while (validInitial == false) {
+                        System.out.print("Enter middle intial: ");
+                        initial = sc.nextLine();
+
+                        if (!isValidMiddleInitial(initial)) {
+                            System.out.println(ANSI_RED + "Invalid middle initial. Please enter a single uppercase letter." + ANSI_RESET);
+                        } else {
+                            validInitial = true;
+                        }
                     }
-                }
-                member.setMiddleInitial(initial);
+                    member.setMiddleInitial(initial);
 
-                //set last name
-                System.out.print("Enter last name: ");
-                member.setLastName(sc.nextLine());
+                    //set last name
+                    System.out.print("Enter last name: ");
+                    String lastName = sc.nextLine();
+                    member.setLastName(lastName);
 
-                pass = false;
-                //set gender
-                String gender = null;
-                while (pass == false) {
-                    System.out.print("Enter gender(male/female): ");
-                    gender = sc.nextLine();
+                    //set gender
+                    String gender = null;
+                    while (pass == false) {
+                        System.out.print("Enter gender(male/female): ");
+                        gender = sc.nextLine();
 
-                    if (gender.length() < 2) {
-                        System.out.println(ANSI_RED + "Entered gender must be atleast two characters long" + ANSI_RESET);
-                    } else {
-                        pass = true;
+                        if (gender.length() < 2) {
+                            System.out.println(ANSI_RED + "Entered gender must be atleast two characters long" + ANSI_RESET);
+                        } else {
+                            pass = true;
+                        }
                     }
-                }
-                member.setGender(gender);
+                    member.setGender(gender);
 
-                pass = false;
-                //set bdate
-                String bDate = null;
-                while (pass == false) {
-                    System.out.print("Enter Date of birth (mm/dd/yyyy): ");
-                    bDate = sc.nextLine();
+                    pass = false;
+                    //set bdate
+                    String bDate = null;
+                    while (pass == false) {
+                        System.out.print("Enter Date of birth (mm/dd/yyyy): ");
+                        bDate = sc.nextLine();
 
-                    LocalDate dateFormat = isValidDate(bDate);
+                        LocalDate dateFormat = isValidDate(bDate);
 
-                    if (dateFormat == null) {
-                        System.out.println(ANSI_RED + "Entered date is invalid format." + ANSI_RESET);
-                    } else {
-                        pass = true;
+                        if (dateFormat == null) {
+                            System.out.println(ANSI_RED + "Entered date is invalid format." + ANSI_RESET);
+                        } else {
+                            pass = true;
+                        }
                     }
+
+                    member.setBirthDate(bDate);
+
+                    pass = false;
+                    //set contact num
+                    String contactNum = null;
+                    while (pass == false) {
+                        System.out.print("Enter contact num: ");
+                        contactNum = sc.nextLine();
+                        if (contactNum.length() < 11 || contactNum.length() > 11) {
+                            System.out.println(ANSI_RED + "Contact number must be atleast 11 characters long" + ANSI_RESET);
+                        } else {
+                            pass = true;
+                        }
+                    }
+                    member.setCellNum(contactNum);
+                    pass = false;
+                    //set email
+                    String email = null;
+                    while (pass == false) {
+                        System.out.print("Enter email: ");
+                        email = sc.nextLine();
+                        if (!isValidEmail(email)) {
+                            System.out.println(ANSI_RED + "Invalid email format" + ANSI_RESET);
+                        } else {
+                            member.setEmail(email);
+                            pass = true;
+                        }
+                    }
+                    member.setEmail(email);
+
+                    //append fullname
+                    String fullName = firstName + " " + initial + " " + lastName;
+                    //verify if user existed
+                    boolean isMemberExists = false;
+                    ArrayList<User> members = member.read();
+                    for (User item : members) {
+                        if (item.getFullName().equals(fullName)) {
+                            isMemberExists = true;
+                            break;
+                        }
+                    }
+
+                    if (isMemberExists) {
+                        System.out.println(ANSI_RED + "Member already exists." + ANSI_RESET);
+                    } else {
+                        member.add();
+                    }
+                    break;
                 }
+                case "b": {
+                    boolean pass = false;
+                    //set id
+                    System.out.print("Enter Id: ");
+                    String id = sc.nextLine();
+                    officer.setId(id);
 
-                member.setDateOfBirth(bDate);
+                    ArrayList<User> members = member.read();
 
-                //set contact num
-                System.out.print("Enter contact num: ");
-                member.setCellNum(sc.nextLine());
-                
-                //set email
-                System.out.print("Enter email: ");
-                member.setEmail(sc.nextLine());
-                
-                member.add();
-                break;
+                    for (User item : members) {
+                        if (item.getId().equals(id)) {
+                            System.out.print(item.getId());
+                            System.out.print("    |    " + item.getFirstName());
+                            System.out.print("    |    " + item.getMidIn());
+                            System.out.print("    |    " + item.getLastName());
+                            System.out.print("    |    " + item.getGender());
+                            System.out.print("    |    " + item.getBirthDate());
+                            System.out.print("    |    " + item.getCellNum());
+                            System.out.print("    |    " + item.getEmail() + "\n");
+
+                            officer.setId(id);
+                            officer.setFirstName(item.getFirstName());
+                            officer.setMiddleInitial(item.getMidIn());
+                            officer.setLastName(item.getLastName());
+                            officer.setGender(item.getGender());
+                            officer.setBirthDate(item.getBirthDate());
+                            officer.setCellNum(item.getCellNum());
+                            officer.setEmail(item.getEmail());
+                            
+                            //set school year  
+                            String schoolYear = null;
+                            while (pass == false) {
+                                System.out.print("Enter school year: ");
+                                schoolYear = sc.nextLine();
+
+                                String format = verifySchoolYearFormat(schoolYear);
+
+                                if (format == null) {
+                                    System.out.println("Invalid format");
+                                } else {
+                                    pass = true;
+                                }
+                            }
+                            officer.setSchoolYear(schoolYear);
+
+                            //set position
+                            System.out.print("Enter position: ");
+                            officer.setPosition(sc.nextLine());
+
+                            officer.add();
+                        }
+                    }
+                    break;
+                }
+                case "c": {
+                    isContinue = false;
+                    break;
+                }
+                default: {
+                    System.out.println(ANSI_RED + "Invalid option." + ANSI_RESET);
+                    break;
+                }
             }
-            case "b": {
-                boolean pass = false;
-                //set firstname
-                System.out.print("Enter first name: ");
-                officer.setFirstName(sc.nextLine());
 
-                //set initial
-                String initial = null;
-                while (pass == false) {
-                    System.out.print("Enter middle initial: ");
-                    initial = sc.nextLine();
+        } while (isContinue);
 
-                    if (!isValidMiddleInitial(initial)) {
-                        System.out.println(ANSI_RED + "Invalid middle initial. Please enter a single uppercase letter." + ANSI_RESET);
-                    } else {
-                        pass = true;
-                    }
-                }
-                officer.setMiddleInitial(initial);
-
-                //set last name
-                System.out.print("Enter last name: ");
-                officer.setLastName(sc.nextLine());
-
-                pass = false;
-                //set school year  
-                String schoolYear = "";
-                while (pass == false) {
-                    System.out.print("Enter school year: ");
-                    schoolYear = sc.nextLine();
-
-                    String format = verifySchoolYearFormat(schoolYear);
-
-                    if (format == null) {
-                        System.out.println("Invalid format");
-                    } else {
-                        pass = true;
-                    }
-                }
-                officer.setSchoolYear(schoolYear);
-                //set position
-                System.out.print("Enter position: ");
-                officer.setPosition(sc.nextLine());
-
-                officer.add();
-                break;
-            }
-            default: {
-                System.out.println(ANSI_RED + "Invalid option." + ANSI_RESET);
-            }
-        }
     }
 
     public static void displayList() {
         //instantiate classes
         Member member = new Member();
         Officer officer = new Officer();
-        Scanner sc = new Scanner(System.in);
-        System.out.print("""
+
+        boolean isContinue = true;
+        do {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("""
                             Enter:
                             a. Members
                             b. Female Members
                             c. Male Members
                             d. Officers
+                            e. Menu
                             """);
-        String option = sc.nextLine().toLowerCase();
+            System.out.print("Enter option : ");
+            String option = sc.nextLine().toLowerCase();
 
-        switch (option) {
-            case "a": {
-                ArrayList<User> members = member.read();
-                System.out.println("*-------------------------------------------------MEMBERS---------------------------------------------------------------------*");
-                System.out.println("ID    |    Firstname    |    Middle Initial    |    Lastname    |    Gender    |    Birthdate    |    Contact num    |    Email");
-                for (User item : members) {
-                    System.out.print(item.getId());
-                    System.out.print("    |    " + item.getFirstName());
-                    System.out.print("    |    " + item.getMidIn());
-                    System.out.print("    |    " + item.getLastName());
-                    System.out.print("    |    " + item.getGender());
-                    System.out.print("    |    " + item.getDoB());
-                    System.out.print("    |    " + item.getCellNum());
-                    System.out.print("    |    " + item.getEmail() + "\n");
-                }
-                if (members == null) {
-                    System.out.println("No members found");
-                }
-                break;
-            }
-            case "b": {
-                ArrayList<User> members = member.read();
-                System.out.println("*---------------------------------------------  FEMALE MEMBERS----- ----------------------------------------------------------*");
-                System.out.println("ID    |    Firstname    |    Middle Initial    |    Lastname    |    Gender    |    Birthdate    |    Contact num    |    Email");
-                for (User item : members) {
-                    if (item.getGender().equals("female")) {
+            switch (option) {
+                case "a": {
+                    ArrayList<User> members = member.read();
+                    System.out.println("*-------------------------------------------------MEMBERS---------------------------------------------------------------------*");
+                    System.out.println("ID    |    Firstname    |    Middle Initial    |    Lastname    |    Gender    |    Birthdate    |    Contact num    |    Email");
+                    for (User item : members) {
                         System.out.print(item.getId());
                         System.out.print("    |    " + item.getFirstName());
                         System.out.print("    |    " + item.getMidIn());
                         System.out.print("    |    " + item.getLastName());
                         System.out.print("    |    " + item.getGender());
-                        System.out.print("    |    " + item.getDoB());
+                        System.out.print("    |    " + item.getBirthDate());
                         System.out.print("    |    " + item.getCellNum());
                         System.out.print("    |    " + item.getEmail() + "\n");
                     }
-
+                    if (members == null) {
+                        System.out.println("No members found");
+                    }
+                    break;
                 }
+                case "b": {
+                    ArrayList<User> members = member.read();
+                    System.out.println("*---------------------------------------------  FEMALE MEMBERS----- ----------------------------------------------------------*");
+                    System.out.println("ID    |    Firstname    |    Middle Initial    |    Lastname    |    Gender    |    Birthdate    |    Contact num    |    Email");
+                    for (User item : members) {
+                        if (item.getGender().equals("female")) {
+                            System.out.print(item.getId());
+                            System.out.print("    |    " + item.getFirstName());
+                            System.out.print("    |    " + item.getMidIn());
+                            System.out.print("    |    " + item.getLastName());
+                            System.out.print("    |    " + item.getGender());
+                            System.out.print("    |    " + item.getBirthDate());
+                            System.out.print("    |    " + item.getCellNum());
+                            System.out.print("    |    " + item.getEmail() + "\n");
+                        }
 
-                if (members == null) {
-                    System.out.println("No members found");
-                }
-                break;
-            }
-            case "c": {
-                ArrayList<User> members = member.read();
-                System.out.println("*-----------------------------------------------MALE MEMBERS------------------------------------------------------------------*");
-                System.out.println("ID    |    Firstname    |    Middle Initial    |    Lastname    |    Gender    |    Birthdate    |    Contact num    |    Email");
-                for (User item : members) {
-                    if (item.getGender().equals("male")) {
-                        System.out.print(item.getId());
-                        System.out.print("    |    " + item.getFirstName());
-                        System.out.print("    |    " + item.getMidIn());
-                        System.out.print("    |    " + item.getLastName());
-                        System.out.print("    |    " + item.getGender());
-                        System.out.print("    |    " + item.getDoB());
-                        System.out.print("    |    " + item.getCellNum());
-                        System.out.print("    |    " + item.getEmail() + "\n");
                     }
 
+                    if (members == null) {
+                        System.out.println("No members found");
+                    }
+                    break;
                 }
-                if (members == null) {
-                    System.out.println("No members found");
+                case "c": {
+                    ArrayList<User> members = member.read();
+                    System.out.println("*-----------------------------------------------MALE MEMBERS------------------------------------------------------------------*");
+                    System.out.println("ID    |    Firstname    |    Middle Initial    |    Lastname    |    Gender    |    Birthdate    |    Contact num    |    Email");
+                    for (User item : members) {
+                        if (item.getGender().equals("male")) {
+                            System.out.print(item.getId());
+                            System.out.print("    |    " + item.getFirstName());
+                            System.out.print("    |    " + item.getMidIn());
+                            System.out.print("    |    " + item.getLastName());
+                            System.out.print("    |    " + item.getGender());
+                            System.out.print("    |    " + item.getBirthDate());
+                            System.out.print("    |    " + item.getCellNum());
+                            System.out.print("    |    " + item.getEmail() + "\n");
+                        }
+
+                    }
+                    if (members == null) {
+                        System.out.println("No members found");
+                    }
+                    break;
                 }
-                break;
-            }
-            case "d": {
-                ArrayList<User> officers = officer.read();
-                System.out.println("*---------------OFFICERS-------------*");
-                displayOfficerHorizontally(officers);
-//                for (User item : officers) {
-//                    System.out.println("id: " + item.getId());
-//                    System.out.println("Firstname: " + item.getFirstName());
-//                    System.out.println("middle initial: " + item.getMidIn());
-//                    System.out.println("Lastname: " + item.getLastName());
-//                    System.out.println("Year Level: " + item.getSchoolYear());
-//                    System.out.println("Position: " + item.getPosition());
-//                    System.out.println("*----------------------------*");
-//                }
-                if (officers == null) {
-                    System.out.println("No members found");
+                case "d": {
+                    ArrayList<User> officers = officer.read();
+                    System.out.println("*---------------OFFICERS-------------*");
+                    displayOfficerHorizontally(officers);
+
+                    if (officers == null) {
+                        System.out.println("No members found");
+                    }
+                    break;
                 }
-                break;
+                case "e": {
+                    isContinue = false;
+                    break;
+                }
+                default: {
+                    System.out.println(ANSI_RED + "Invalid option." + ANSI_RESET);
+                }
             }
-            default: {
-                System.out.println(ANSI_RED + "Invalid option." + ANSI_RESET);
-            }
-        }
+        } while (isContinue);
+
     }
 
     public static void displayOfficerHorizontally(ArrayList<User> officers) {
-        System.out.println("ID    |    Firstname   |    Middle Initial   |    Lastname     |      Year Level     |     Position");
+        System.out.println("ID    |    Firstname    |    Middle Initial    |    Lastname    |    Gender    |    Birthdate    |    Contact num    |    Email    |    School Year    |    Position");
         for (User item : officers) {
-            System.out.print(item.getId() + "    |    ");
-            System.out.print(item.getFirstName() + "    |    ");
-            System.out.print(item.getMidIn() + "    |    ");
-            System.out.print(item.getLastName() + "    |    ");
-            System.out.print(item.getSchoolYear() + "    |    ");
-            System.out.print(item.getPosition() + "\n");
+            System.out.print(item.getId());
+            System.out.print("    |    " + item.getFirstName());
+            System.out.print("    |    " + item.getMidIn());
+            System.out.print("    |    " + item.getLastName());
+            System.out.print("    |    " + item.getGender());
+            System.out.print("    |    " + item.getBirthDate());
+            System.out.print("    |    " + item.getCellNum());
+            System.out.print("    |    " + item.getEmail());
+            System.out.print("    |    " + item.getSchoolYear());
+            System.out.print("    |    " + item.getPosition() + "\n");
+        }
+        if (officers == null) {
+            System.out.println("No members found");
         }
     }
 
@@ -317,179 +385,250 @@ public class CodebytersDirectorySystem {
         //instantiate classes
         Member member = new Member();
         Officer officer = new Officer();
-        Scanner sc = new Scanner(System.in);
-        System.out.print("""
+
+        boolean isContinue = true;
+        do {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("""
                             Enter:
                             a. Member
                             b. Officer
+                            c. Menu
                             """);
-        String option = sc.nextLine().toLowerCase();
+            System.out.print("Enter option : ");
+            String option = sc.nextLine().toLowerCase();
 
-        switch (option) {
-            case "a": {
-                System.out.print("Enter id: ");
-                String id = sc.nextLine();
+            switch (option) {
+                case "a": {
+                    System.out.print("Enter id: ");
+                    String id = sc.nextLine();
 
-                ArrayList<User> members = member.read();
-                System.out.println("*-------------------------------------------------MEMBER--------------------------------------------------------------------*");
-                System.out.println("ID    |    Firstname    |    Middle Initial    |    Lastname    |    Gender    |    Birthdate    |    Contact num    |    Email");
-                for (User item : members) {
-                    if (item.getId().equals(id)) {
-                        System.out.print(item.getId());
-                        System.out.print("    |    " + item.getFirstName());
-                        System.out.print("    |    " + item.getMidIn());
-                        System.out.print("    |    " + item.getLastName());
-                        System.out.print("    |    " + item.getGender());
-                        System.out.print("    |    " + item.getDoB());
-                        System.out.print("    |    " + item.getCellNum());
-                        System.out.print("    |    " + item.getEmail() + "\n");
+                    ArrayList<User> members = member.read();
+                    System.out.println("*-------------------------------------------------MEMBER--------------------------------------------------------------------*");
+                    System.out.println("ID    |    Firstname    |    Middle Initial    |    Lastname    |    Gender    |    Birthdate    |    Contact num    |    Email");
+                    for (User item : members) {
+                        if (item.getId().equals(id)) {
+                            System.out.print(item.getId());
+                            System.out.print("    |    " + item.getFirstName());
+                            System.out.print("    |    " + item.getMidIn());
+                            System.out.print("    |    " + item.getLastName());
+                            System.out.print("    |    " + item.getGender());
+                            System.out.print("    |    " + item.getBirthDate());
+                            System.out.print("    |    " + item.getCellNum());
+                            System.out.print("    |    " + item.getEmail() + "\n");
+                        }
+
                     }
-
-                }
-                if (members == null) {
-                    System.out.println("No members found");
-                }
-                break;
-            }
-            case "b": {
-                System.out.print("Enter id: ");
-                String id = sc.nextLine();
-
-                ArrayList<User> officers = officer.read();
-                System.out.println("*------------------------------------------OFFICER---------------------------------------------*");
-                System.out.println("ID    |    Firstname   |    Middle Initial   |    Lastname     |      Year Level     |     Position");
-                for (User item : officers) {
-                    if (item.getId().equals(id)) {
-                        System.out.print(item.getId() + "    |    ");
-                        System.out.print(item.getFirstName() + "    |    ");
-                        System.out.print(item.getMidIn() + "    |    ");
-                        System.out.print(item.getLastName() + "    |    ");
-                        System.out.print(item.getSchoolYear() + "    |    ");
-                        System.out.print(item.getPosition() + "\n");
+                    if (members == null) {
+                        System.out.println("No members found");
                     }
-
+                    break;
                 }
-                break;
+                case "b": {
+                    System.out.print("Enter id: ");
+                    String id = sc.nextLine();
+
+                    ArrayList<User> officers = officer.read();
+                    System.out.println("*------------------------------------------OFFICER---------------------------------------------*");
+                    System.out.println("ID    |    Firstname    |    Middle Initial    |    Lastname    |    Gender    |    Birthdate    |    Contact num    |    Email    |    School Year    |    Position");
+                    for (User item : officers) {
+                        if (item.getId().equals(id)) {
+                            System.out.print("    |    " + item.getFirstName());
+                            System.out.print("    |    " + item.getMidIn());
+                            System.out.print("    |    " + item.getLastName());
+                            System.out.print("    |    " + item.getGender());
+                            System.out.print("    |    " + item.getBirthDate());
+                            System.out.print("    |    " + item.getCellNum());
+                            System.out.print("    |    " + item.getEmail());
+                            System.out.print("    |    " + item.getSchoolYear());
+                            System.out.print("    |    " + item.getPosition() + "\n");
+                        }
+
+                    }
+                    break;
+                }
+                case "c": {
+                    isContinue = false;
+                    break;
+                }
+                default: {
+                    System.out.println(ANSI_RED + "Invalid option." + ANSI_RESET);
+                }
             }
-            default: {
-                System.out.println(ANSI_RED + "Invalid option." + ANSI_RESET);
-            }
-        }
+        } while (isContinue);
+
     }
 
     public static void updateList() {
+
         //instantiate classes
         Member member = new Member();
-        Officer officer = new Officer();
-
         Scanner sc = new Scanner(System.in);
-        System.out.print("""
-                            Enter:
-                            a. Member
-                            b. Officer
-                            """);
-        String option = sc.nextLine().toLowerCase();
 
-        switch (option) {
-            case "a": {
-                boolean pass = false;
-                //set id
-                System.out.print("Enter Id: ");
-                member.setId(sc.nextLine());
-                //set firstname
-                System.out.print("Enter first name: ");
-                member.setFirstName(sc.nextLine());
-                //set mid initial
-                System.out.print("Enter middle intial: ");
-                member.setMiddleInitial(sc.nextLine());
-                //set last name
-                System.out.print("Enter last name: ");
-                member.setLastName(sc.nextLine());
+        boolean pass = false;
+        //set id
+        System.out.print("Enter Id: ");
+        member.setId(sc.nextLine());
+        //set firstname
+        System.out.print("Enter first name: ");
+        member.setFirstName(sc.nextLine());
+        //set mid initial
+        System.out.print("Enter middle intial: ");
+        member.setMiddleInitial(sc.nextLine());
+        //set last name
+        System.out.print("Enter last name: ");
+        member.setLastName(sc.nextLine());
 
-                //set gender
-                String gender = null;
-                while (pass == false) {
-                    System.out.print("Enter gender(male/female): ");
-                    gender = sc.nextLine();
+        //set gender
+        String gender = null;
+        while (pass == false) {
+            System.out.print("Enter gender(male/female): ");
+            gender = sc.nextLine();
 
-                    if (gender.length() < 2) {
-                        System.out.println("Entered gender must be atleast two characters long.");
-                    } else {
-                        pass = true;
-                    }
-                }
-                member.setGender(gender);
-
-                pass = false;
-                //set bdate
-                String bDate = null;
-                while (pass == false) {
-                    System.out.print("Enter Date of birth (mm/dd/yyyy): ");
-                    bDate = sc.nextLine();
-
-                    LocalDate dateFormat = isValidDate(bDate);
-
-                    if (dateFormat == null) {
-                        System.out.println("Entered date is invalid format");
-                    } else {
-                        pass = true;
-                    }
-                }
-
-                member.setDateOfBirth(bDate);
-
-                //set contact num
-                System.out.print("Enter contact num: ");
-                member.setCellNum(sc.nextLine());
-                //set email
-                System.out.print("Enter email: ");
-                member.setEmail(sc.nextLine());
-
-                member.update();
-                break;
+            if (gender.length() < 2) {
+                System.out.println("Entered gender must be atleast two characters long.");
+            } else {
+                pass = true;
             }
-            case "b": {
-                boolean pass = false;
-                //set id
-                System.out.print("Enter Id: ");
-                officer.setId(sc.nextLine());
-                //set firstname
-                System.out.print("Enter first name: ");
-                officer.setFirstName(sc.nextLine());
-                //set mid initial
-                System.out.print("Enter middle intial: ");
-                officer.setMiddleInitial(sc.nextLine());
-                //set last name
-                System.out.print("Enter last name: ");
-                officer.setLastName(sc.nextLine());
+        }
+        member.setGender(gender);
 
-                //set school year  
-                String schoolYear = null;
-                while (pass == false) {
-                    System.out.println("Enter school year: ");
-                    schoolYear = sc.nextLine();
+        pass = false;
+        //set bdate
+        String bDate = null;
+        while (pass == false) {
+            System.out.print("Enter Date of birth (mm/dd/yyyy): ");
+            bDate = sc.nextLine();
 
-                    String format = verifySchoolYearFormat(schoolYear);
+            LocalDate dateFormat = isValidDate(bDate);
 
-                    if (format == null) {
-                        System.out.println("Invalid format");
-                    } else {
-                        pass = true;
-                    }
-                }
-                officer.setSchoolYear(schoolYear);
-                //set position
-                System.out.print("Enter position: ");
-                officer.setPosition(sc.nextLine());
-
-                officer.update();
-                break;
-            }
-            default: {
-                System.out.println(ANSI_RED + "Invalid option." + ANSI_RESET);
+            if (dateFormat == null) {
+                System.out.println("Entered date is invalid format");
+            } else {
+                pass = true;
             }
         }
 
+        member.setBirthDate(bDate);
+
+        //set contact num
+        System.out.print("Enter contact num: ");
+        member.setCellNum(sc.nextLine());
+        //set email
+        System.out.print("Enter email: ");
+        member.setEmail(sc.nextLine());
+
+        member.update();
+
+//        Officer officer = new Officer();
+//
+//        
+//        System.out.print("""
+//                            Enter:
+//                            a. Member
+//                            b. Officer
+//                            """);
+//        String option = sc.nextLine().toLowerCase();
+//
+//        switch (option) {
+//            case "a": {
+//                boolean pass = false;
+//                //set id
+//                System.out.print("Enter Id: ");
+//                member.setId(sc.nextLine());
+//                //set firstname
+//                System.out.print("Enter first name: ");
+//                member.setFirstName(sc.nextLine());
+//                //set mid initial
+//                System.out.print("Enter middle intial: ");
+//                member.setMiddleInitial(sc.nextLine());
+//                //set last name
+//                System.out.print("Enter last name: ");
+//                member.setLastName(sc.nextLine());
+//
+//                //set gender
+//                String gender = null;
+//                while (pass == false) {
+//                    System.out.print("Enter gender(male/female): ");
+//                    gender = sc.nextLine();
+//
+//                    if (gender.length() < 2) {
+//                        System.out.println("Entered gender must be atleast two characters long.");
+//                    } else {
+//                        pass = true;
+//                    }
+//                }
+//                member.setGender(gender);
+//
+//                pass = false;
+//                //set bdate
+//                String bDate = null;
+//                while (pass == false) {
+//                    System.out.print("Enter Date of birth (mm/dd/yyyy): ");
+//                    bDate = sc.nextLine();
+//
+//                    LocalDate dateFormat = isValidDate(bDate);
+//
+//                    if (dateFormat == null) {
+//                        System.out.println("Entered date is invalid format");
+//                    } else {
+//                        pass = true;
+//                    }
+//                }
+//
+//                member.setDateOfBirth(bDate);
+//
+//                //set contact num
+//                System.out.print("Enter contact num: ");
+//                member.setCellNum(sc.nextLine());
+//                //set email
+//                System.out.print("Enter email: ");
+//                member.setEmail(sc.nextLine());
+//
+//                member.update();
+//                break;
+//            }
+//            case "b": {
+//                boolean pass = false;
+//                //set id
+//                System.out.print("Enter Id: ");
+//                officer.setId(sc.nextLine());
+//                //set firstname
+//                System.out.print("Enter first name: ");
+//                officer.setFirstName(sc.nextLine());
+//                //set mid initial
+//                System.out.print("Enter middle intial: ");
+//                officer.setMiddleInitial(sc.nextLine());
+//                //set last name
+//                System.out.print("Enter last name: ");
+//                officer.setLastName(sc.nextLine());
+//
+//                //set school year  
+//                String schoolYear = null;
+//                while (pass == false) {
+//                    System.out.println("Enter school year: ");
+//                    schoolYear = sc.nextLine();
+//
+//                    String format = verifySchoolYearFormat(schoolYear);
+//
+//                    if (format == null) {
+//                        System.out.println("Invalid format");
+//                    } else {
+//                        pass = true;
+//                    }
+//                }
+//                officer.setSchoolYear(schoolYear);
+//                //set position
+//                System.out.print("Enter position: ");
+//                officer.setPosition(sc.nextLine());
+//
+//                officer.update();
+//                break;
+//            }
+//            default: {
+//                System.out.println(ANSI_RED + "Invalid option." + ANSI_RESET);
+//            }
+//        }
     }
 
     public static LocalDate isValidDate(String dateStr) {
@@ -534,5 +673,13 @@ public class CodebytersDirectorySystem {
         }
 
         return true;
+    }
+
+    //email validator
+    public static boolean isValidEmail(String email) {
+        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

@@ -1,5 +1,1 @@
-1,Clarence S. Japinan,male,06/27/2003,09123456789,japinanclarence@gmail.com
-2,Jake F Ral,male,09/29/2009,091283,jake@gmail.com
-3,Jade D Lore,male,07/18/2002,09128734765,lore@gmail.com
-4,Hannah O Dannah,female,09/09/2009,09124,hannah@gmail.com
-5,Dannah O Hannah,female,09/09/2009,091234,dannah@gmail.com
+1,Bernadith,B,Dagasdas,female,07/21/2001,09123456789,bernadith@gmail.com

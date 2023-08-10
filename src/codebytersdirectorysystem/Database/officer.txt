@@ -1,8 +1,10 @@
-1,Dony Dongiapon, 2021-2022, President
-2,Vinz Alferez Lore,2023-2024,Vice
-3,Lester P Dagansina,2021-2022,Gwapo lang
-4,Trish A Anore,2023-2023,69
-5,JohnPaul C Colita,2023-2024,Vice Governor
-6,John Lloyd S Burnea,2023-2024,Secretary
-7,Hannah H Deniva,2003-2004,Sample
-8,Oliver S Salve,2021-2023,Sample
+1,Jorge,M,Magno,female,09/07/2003,1239848412,jorge@gmail.com,2021-2022,President
+2,jade,C,lore,male,10/02/2002,09988812312312,jadede@gmail.com,2024-2024,Governor
+3,Jack,R,Roberto,male,09/21/2000,09123456789,jackR@gmail.com,2023-2024,Random
+4,Bea,L,Benina,female,01/10/2000,09876542311,bea@gmail.com,2024-2025,Auditor
+5,Jamiaca,C,Alforon,female,01/20/2002,09123456789,jamaica@gmail.com,2023-2024,Associative Secretariat
+6,Donnah,F,Santiago,female,07/20/2021,09123456789,santiago@gmail.com,2022-2023,Vice President
+7,David,M,Marcos,male,01/21/2022,09123456789,david@gmail.com,2021-2022,Bus.Mngr
+8,Zaldy,D,Lazerna,male,07/22/2022,09123456798,zaldy@gmail.com,2021-2022,Associative Auditor
+9,Richard,M,Dagasdas,male,01/21/2021,09123456789,richard@gmail.com,2022-2023,Sample
+10,Bernadith,B,Dagasdas,female,07/21/2001,09123456789,bernadith@gmail.com,2022-2023,Secret
