@@ -1,1 +1,3 @@
-1,Bernadith,B,Dagasdas,female,07/21/2001,09123456789,bernadith@gmail.com
+1,Bernadith,S,Dagasdas,female,09/10/2020,09123456789,bernadith@gmail.com
+2,Ricardo,L,Dimaampao,male,08/01/2001,09876543211,ricardo@gmail.com
+4,a,E,Alferez,male,01/01/2001,09123456789,aLferez@gmail.com

@@ -66,8 +66,6 @@ public class Officer extends User {
 
             // Now append the new member information to the file
             String newMemberData = this.getId() + "," + this.getFirstName() + "," + this.getMidIn() + "," + this.getLastName() + "," + gender + "," + birthDate + "," + cellNum + "," + email + "," + schoolYear + "," + position;
-
-            this.deleteMember(this.getId());//delete this entry from the members file
             Files.write(path, (newMemberData + System.lineSeparator()).getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
             System.out.println(ANSI_GREEN + "Officer added successfully" + ANSI_RESET);
         } catch (Exception e) {
@@ -178,6 +176,38 @@ public class Officer extends User {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Failed to delete user.");
+        }
+    }
+
+    public void deleteCurrentInstance(int userId) {
+        try {
+            File inputFile = new File("src/CodebytersDirectorySystem/Database/member.txt");
+            File tempFile = new File("src/CodebytersDirectorySystem/Database/temp.txt");
+
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String currentLine;
+
+            while ((currentLine = reader.readLine()) != null) {
+                String[] lineParts = currentLine.split(",");
+
+                if (lineParts.length > 0) {
+                    int id = Integer.parseInt(lineParts[0].trim()); // Handle whitespace
+
+                    if (id != userId) {
+                        writer.write(currentLine + System.getProperty("line.separator"));
+                    }
+                }
+            }
+
+            writer.close();
+            reader.close();
+
+            inputFile.delete();
+            tempFile.renameTo(inputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

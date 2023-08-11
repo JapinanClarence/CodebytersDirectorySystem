@@ -216,7 +216,7 @@ public class CodebytersDirectorySystem {
                             officer.setBirthDate(item.getBirthDate());
                             officer.setCellNum(item.getCellNum());
                             officer.setEmail(item.getEmail());
-                            
+
                             //set school year  
                             String schoolYear = null;
                             while (pass == false) {
@@ -238,6 +238,9 @@ public class CodebytersDirectorySystem {
                             officer.setPosition(sc.nextLine());
 
                             officer.add();
+                            int userId = Integer.parseInt(id);//id from user prompt, convert to integer
+                            
+                            officer.deleteCurrentInstance(userId);//delete this entry from the members file
                         }
                     }
                     break;
